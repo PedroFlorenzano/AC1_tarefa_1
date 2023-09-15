@@ -24,24 +24,62 @@ public class Tarefa1Application {
 	public CommandLineRunner initRunner(@Autowired ProdutoRepository produtoRepository, @Autowired CategoriaRepository categoriaRepository){
 		return args -> {
 
-			Produto produto1 = new Produto(1L, "Garrafa Pet", 2);
-			Produto produto2 = new Produto(2L, "Galaxy S10", 1);
-			Produto produto3 = new Produto(3L, "Notebook", 1);
+			// Instanciando os Produtos
+			Produto produtoTeclado = new Produto( "Teclado Gamer", 2);
+			Produto produtoCelular = new Produto( "Celular", 6);
+			Produto produtoNotebook = new Produto( "Notebook", 10);
+			Produto produtoMesa = new Produto( "Mesa", 4);
 			
-			produtoRepository.inserirEAtualizarProduto(produto1);
-			produtoRepository.inserirEAtualizarProduto(produto2);
-			produtoRepository.inserirEAtualizarProduto(produto3);
+			// Salvando produtos dentro do banco de dados
+			produtoRepository.inserirProduto(produtoTeclado);
+			produtoRepository.inserirProduto(produtoCelular);
+			produtoRepository.inserirProduto(produtoNotebook);
+			produtoRepository.inserirProduto(produtoMesa);
 
-			List<Produto> listaDeProdutos = produtoRepository.selecionarTodosProdutos();
+			// Listando todos os produtos salvos
+			List<Produto> listaDeProdutos = produtoRepository.buscarTodosProdutos();
 			listaDeProdutos.forEach(System.out::println);
 
-			produtoRepository.obterProdutoPorId(3L);
+			// Instanciando um produto novo para substituir (atualizar) por um antigo
+			Produto produtoMouse = new Produto("Mouse Gamer", 20);
+			produtoRepository.atualizarProduto(produtoMouse, 4L);
 
-			produtoRepository.excluirProdutoPorId(3L);
+			// // Excluindo um produto
+			produtoRepository.excluirProdutoPorId(4L);
+			
+			// Instanciando categorias
+			Categoria categoriaJogo = new Categoria( "Categoria de Jogos", "Categoria específica para jogos de qualidade!");
+			Categoria categoriaEletronico = new Categoria( "Categoria Eletrônicos", "Categoria específica equipamentos eletrônicos!");
+			Categoria categoriaUtilitarios = new Categoria( "Categoria de Utilitários", "Categoria específica para utilitários!");
+			
+			// Salvando categorias dentro do banco de dados
+			categoriaRepository.inserirCategoria(categoriaJogo);
+			categoriaRepository.inserirCategoria(categoriaEletronico);
+			categoriaRepository.inserirCategoria(categoriaUtilitarios);
+			
+			// Listando todas as categorias salvas
+			List<Categoria> listaDeCategorias = categoriaRepository.buscarTodasCategorias();
+			listaDeCategorias.forEach(System.out::println);
 
-			categoriaRepository.inserirEAtualizarCategoria(new Categoria(1L, "Plástico", "Produtos feitos de plástico"));
-			categoriaRepository.inserirEAtualizarCategoria(new Categoria(2L, "Eletrônicos", "Produtos eletrônicos"));
+			// Atualizando Categoria
+			Categoria categoriaGeral = new Categoria("Categoria Geral", "Categoria Geral!");
+			categoriaRepository.atualizarCategoria(categoriaGeral, 3L);
+			
+			// Excluindo uma categoria
+			categoriaRepository.excluirCategoriaPorId(3L);
+			
+			// Buscando um produto para adicionar uma categoria e atualiza-la
+			Produto produtoEncontradoTeclado = produtoRepository.buscarProdutoPorId(1L);
+			System.out.println("Produto encontrado no banco: " + produtoEncontradoTeclado);
+			produtoRepository.vinculaProdutoEmCategoria(categoriaJogo, produtoEncontradoTeclado.getId());
+
+			Produto produtoEncontradoCelular = produtoRepository.buscarProdutoPorId(2L);
+			System.out.println("Produto encontrado no banco: " + produtoEncontradoTeclado);
+			produtoRepository.vinculaProdutoEmCategoria(categoriaEletronico, produtoEncontradoCelular.getId());
+
+			Produto produtoEncontradoNotebook = produtoRepository.buscarProdutoPorId(3L);
+			System.out.println("Produto encontrado no banco: " + produtoEncontradoNotebook);
+			produtoRepository.vinculaProdutoEmCategoria(categoriaEletronico, produtoEncontradoNotebook.getId());
 		};
 	}
-
 }
