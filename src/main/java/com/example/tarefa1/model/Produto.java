@@ -1,5 +1,6 @@
 package com.example.tarefa1.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,18 +28,17 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 200, nullable = false)
+    @Column(name = "prod_nome", length = 200, nullable = false)
     private String nome;
 
-    @Column(length = 200, nullable = false)
+    @Column(name = "prod_qtd", length = 200, nullable = false)
     private Integer quantidade;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name =  "categoriaProdutos_id")
     private Categoria categoriaProdutos;
 
-    public Produto(Long id, String nome, Integer quantidade){
-        this.id = id;
+    public Produto(String nome, Integer quantidade){
         this.nome = nome;
         this.quantidade = quantidade;
     }
